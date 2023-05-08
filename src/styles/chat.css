@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .chat {
+    flex: 1;
+    padding: 20px;
+    overflow-y: scroll;
+  }
+  
+  .message {
+    background-color: #eee;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .form {
+    display: flex;
+    margin-top: 10px;
+  }
+  
+  .input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 5px 0 0 5px;
+  }
+  
+  .button {
+    border: none;
+    background-color: #0070f3;
+    color: #fff;
+    padding: 10px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+  
