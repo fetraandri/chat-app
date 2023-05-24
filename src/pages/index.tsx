@@ -5,14 +5,19 @@ import * as yup from 'yup';
 import styles from '../styles/Home.module.css';
 import FormField from './FormField';
 import PasswordConfirmationField from './PasswordConfirmationField';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Profile from './Profile';
 
-type FormData = {
-  nom: string;
-  prenom: string;
-  motDePasse: string;
-  confirmMotDePasse: string;
-  email: string;
-};
+
+  type FormData = {
+    nom: string;
+    prenom: string;
+    motDePasse: string;
+    confirmMotDePasse: string;
+    email: string;
+  };
+  
 
 const schema = yup.object().shape({
   nom: yup.string().required('Le nom est requis'),
@@ -33,8 +38,14 @@ const RegistrationForm: React.FC = () => {
     watch,
   } = useForm<FormData>();
 
+  const router = useRouter();
+
   const onSubmit = (data: FormData) => {
     console.log(data);
+    router.push({
+      pathname: '/profile',
+      query: { data: JSON.stringify(data) }, // Passer les données sous forme de chaîne JSON dans les paramètres de requête
+    });
   };
 
   const password = watch('motDePasse');
@@ -44,24 +55,26 @@ const RegistrationForm: React.FC = () => {
   };
 
   const handleFormSubmit = async (data: FormData) => {
+    // ...
+  
     try {
+      // Validation succeeded
       await schema.validate(data, { abortEarly: false });
       console.log('Validation succeeded');
-      onSubmit(data);
+      router.push(`/profile?nom=${data.nom}&prenom=${data.prenom}&email=${data.email}`);
     } catch (validationErrors: any) {
-      const errors = validationErrors.inner.reduce((acc: any, error: any) => {
-        acc[error.path] = error.message;
-        return acc;
-      }, {});
-      console.log('Validation failed', errors);
+      // ...
     }
   };
+  
 
   return (
     <form className={styles['registration-form']} onSubmit={handleSubmit(handleFormSubmit)}>
       <FormField label="Pseudo" type="text" name="nom" register={register} error={errors.nom} />
+      <FormField label="Prénom" type="text" name="prenom" register={register} error={errors.prenom} />
       <FormField label="Email" type="email" name="email" register={register} error={errors.email} />
       <FormField label="Mot de passe" type="password" name="motDePasse" register={register} error={errors.motDePasse} />
+
       <PasswordConfirmationField
         label="Confirmer le mot de passe"
         name="confirmMotDePasse"
@@ -70,9 +83,18 @@ const RegistrationForm: React.FC = () => {
         error={errors.confirmMotDePasse}
       />
 
-      <input type="submit" value="S'inscrire" />
+      <div>
+        <input type="submit" value="S'inscrire" />
+        <button type="button">
+          <Link href="/login">Se connecter</Link>
+        </button>
+      </div>
     </form>
-  );
+      
+      );
+      
+      
+
 };
 
 export default RegistrationForm;

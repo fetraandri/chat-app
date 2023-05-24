@@ -1,12 +1,12 @@
-// FormField.tsx
 import React from 'react';
+import { FieldError } from 'react-hook-form';
 
 type FormFieldProps = {
   label: string;
   type: string;
   name: string;
   register: any;
-  error: any;
+  error: FieldError | undefined; // Utiliser le type FieldError
 };
 
 const FormField: React.FC<FormFieldProps> = ({ label, type, name, register, error }) => {
@@ -14,7 +14,7 @@ const FormField: React.FC<FormFieldProps> = ({ label, type, name, register, erro
     <div>
       <label>{label}</label>
       <input type={type} {...register(name)} />
-      {error && <span>{error.message}</span>}
+      {error && <span>{error.message}</span>} {/* Utiliser error.message */}
     </div>
   );
 };
